@@ -40,9 +40,10 @@ The Java project needs to be launched at a network destination resolvable by the
 
 The Docker container needs to be launched at a network destination resolvable by the mobile application.
 
-1. Navigate to where the Dockerfile exists in terminal (root folder of this project).
-2. Build the docker image:
+1. Navigate to where the Dockerfile exists in terminal (root folder of this maven project).
+2. (Optional) Build the docker image:
    - docker build . -t {mydocker}/magiclink
+   - This step is optional because the magiclink docker image is already hosted on tamatping/magiclink:latest
 3. Run the docker image:
 ```
 docker run -p 9191:9191 \
@@ -57,5 +58,6 @@ docker run -p 9191:9191 \
   --env MAGICLINK_mail_smtp_starttls_enable=true \
   --env MAGICLINK_mail_smtp_host=smtp.gmail.com \
   --env MAGICLINK_mail_smtp_port=587 \
-  {mydocker}/magiclink:latest
+  --env MAGICLINK_devmode=false \
+  tamatping/magiclink:latest
 ```

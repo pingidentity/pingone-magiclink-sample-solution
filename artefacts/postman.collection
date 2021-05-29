@@ -34,12 +34,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8989/pingone/register?dev-mode=true",
-					"protocol": "http",
+					"raw": "{{magiclink-baseurl}}/pingone/register?dev-mode=true",
 					"host": [
-						"localhost"
+						"{{magiclink-baseurl}}"
 					],
-					"port": "8989",
 					"path": [
 						"pingone",
 						"register"
@@ -137,21 +135,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Set environment variables for next test\", function () {",
-							"    var locationHeader = pm.response.headers.get(\"Location\");",
-							"    if(!locationHeader)",
-							"        locationHeader = pm.response.headers.get(\"Referer\");",
-							"",
-							"    var locationParams = locationHeader.split(\"?\")[1];",
-							"    const eachParamArray = locationParams.split('&');",
-							"    let params = {};",
-							"    eachParamArray.forEach((param) => {",
-							"        const key = param.split('=')[0];",
-							"        const value = param.split('=')[1];",
-							"        Object.assign(params, {[key]: value});",
-							"    });",
-							"    pm.environment.set(\"auth-code\", params[\"code\"]);",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -264,6 +248,10 @@
 		{
 			"key": "pingone-client_redirect_uri",
 			"value": "pingapac://magiclink/callback"
+		},
+		{
+			"key": "magiclink-baseurl",
+			"value": "http://localhost:9191"
 		}
 	]
 }
