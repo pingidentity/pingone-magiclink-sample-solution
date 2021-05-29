@@ -17,6 +17,7 @@ android {
         buildConfigField "String", "OIDC_USERINFO", OIDC_USERINFO
         buildConfigField "String", "OIDC_TOKEN", OIDC_TOKEN
         buildConfigField "String", "OIDC_JWKS", OIDC_JWKS
+        buildConfigField "Integer", "OIDC_TOKEN_EXP_TOLERANCE", OIDC_TOKEN_EXP_TOLERANCE
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

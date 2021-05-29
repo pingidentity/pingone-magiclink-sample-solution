@@ -35,12 +35,12 @@ public class ExchangeCode extends AppCompatActivity {
         this.welcomeView = findViewById(R.id.welcome);
 
         Call nextCall = OIDCTools.callGET(client, getApplicationContext(), BuildConfig.OIDC_USERINFO, null);
-        Callback nextCallback = getUserInfoCallback();
+        Callback nextCallback = getUserInfoCallback(true);
 
         OIDCTools.exchangeCode(client, getApplicationContext(), code, nextCall, nextCallback, null);
     }
 
-    private Callback getUserInfoCallback()
+    private Callback getUserInfoCallback(final boolean isFirstAttempt)
     {
         Callback userInfoCallback = new Callback() {
             @Override
@@ -52,17 +52,21 @@ public class ExchangeCode extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.code() == 401)
                 {
-                    Log.i("userinfo-callback", "401 - Unauthorized, AT: " + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
-                    Call nextCall = OIDCTools.callGET(client, getApplicationContext(), BuildConfig.OIDC_USERINFO, null);
-                    Callback userInfoCallback = getUserInfoCallback();
+                    Log.d("userinfo-callback", "401 - Unauthorized, AT: " + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
 
-                    //TODO implement error callback
-                    Callback errorCallback = null;
+                    if(isFirstAttempt) {
+                        Log.d("userinfo-callback", "401 - Retrying userinfo call on first attempt");
+                        Call nextCall = OIDCTools.callGET(client, getApplicationContext(), BuildConfig.OIDC_USERINFO, null);
+                        Callback userInfoCallback = getUserInfoCallback(false);
 
-                    OIDCTools.refreshToken(client, getApplicationContext(), nextCall, userInfoCallback, errorCallback);
+                        //TODO implement error callback
+                        Callback errorCallback = null;
+
+                        OIDCTools.refreshToken(client, getApplicationContext(), nextCall, userInfoCallback, errorCallback);
+                    }
                 }
                 else if (response.isSuccessful()) {
-                    Log.i("userinfo-callback", "200 - Success");
+                    Log.d("userinfo-callback", "200 - Success");
                     String responseStr = response.body().string();
 
                     String name = "";
@@ -77,8 +81,11 @@ public class ExchangeCode extends AppCompatActivity {
 
                     }catch(JSONException e)
                     {
-
+                        Log.e("exchangecode", "Error getting userinfo claims", e);
                     }
+
+                    Log.d("exchangecode", "Userinfo name: " + name);
+
                     runOnUiThread(new PrintWelcomeRunner(name));
 
                 } else {
@@ -101,6 +108,7 @@ public class ExchangeCode extends AppCompatActivity {
         }
 
         public void run() {
+            Log.i("exchangecode", String.format("Welcome %s", name));
             welcomeView.setText(String.format("Welcome %s", name));
         }
     }

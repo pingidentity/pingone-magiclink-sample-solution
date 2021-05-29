@@ -15,6 +15,7 @@ import org.jose4j.keys.resolvers.VerificationKeyResolver;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.util.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -40,6 +41,30 @@ public class OIDCTools {
             Log.i("oidc-tools", "Refreshing token failed - no refresh token found");
             return false;
         }
+
+        String accessToken = SecureStorage.getValue(context, SecureStorage.TOKEN_ACCESS_TOKEN);
+
+        //only refresh if accessToken is expiring
+        if(accessToken != null && accessToken.split("\\.").length == 2)
+        {
+            String json = new String(Base64.getDecoder().decode(accessToken.split("\\.")[1]));
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+
+                long exp = jsonObject.getLong("exp");
+                long now = (Instant.now().getEpochSecond() + BuildConfig.OIDC_TOKEN_EXP_TOLERANCE ); //adding second buffer
+
+                if(now < exp)
+                {
+                    Log.d("oidc-tools", "Access token hasn't expired yet. Not refreshing.");
+                    return true;
+                }
+            } catch (JSONException e) {
+                Log.e("oidc-tools", "Unable to unwrap Access Token JSON, continuing with refresh", e);
+            }
+        }
+
+        //Instant.now().getEpochSecond()
 
         Log.i("oidc-tools", "Refreshing tokens");
 
@@ -77,7 +102,7 @@ public class OIDCTools {
         while(accessToken == null && count < 50)
         {
             try {
-                Log.i("oidc-tools", "Waiting for access token");
+                Log.d("oidc-tools", "Waiting for access token");
                 Thread.sleep(100);
                 accessToken = SecureStorage.getValue(context, SecureStorage.TOKEN_ACCESS_TOKEN);
             }catch(InterruptedException e)
@@ -91,7 +116,7 @@ public class OIDCTools {
 
     public synchronized static boolean exchangeCode(OkHttpClient client, Context context, String code, Call nextCall, Callback nextCallback, Callback errorCallback)
     {
-        Log.i("oidc-tools", "Exchanging code for access token");
+        Log.d("oidc-tools", "Exchanging code for access token");
 
         String clientId = SecureStorage.getValue(context, SecureStorage.LOGIN_CLIENT_ID);
         String codeVerifier = SecureStorage.getValue(context, SecureStorage.LOGIN_CODE_VERIFIER);
@@ -133,6 +158,10 @@ public class OIDCTools {
 
         String accessToken = getAccessToken(client, context);
 
+        String safeAT = (accessToken != null) ? accessToken.substring(0, accessToken.lastIndexOf(".")): "no-at";
+
+        Log.d("oidc-tools", String.format("Calling %s with access token %s (signature removed)", url, safeAT));
+
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", "Bearer " + accessToken)
@@ -149,7 +178,7 @@ public class OIDCTools {
 
     public static JSONObject saveTokens(@NonNull Context context, String accessTokenResponse)
     {
-        Log.i("oidc-tools", "Saving tokens");
+        Log.d("oidc-tools", "Saving tokens");
 
         String expectedNonce = SecureStorage.getValue(context, SecureStorage.LOGIN_NONCE, true);
 
@@ -203,11 +232,11 @@ public class OIDCTools {
         SecureStorage.setValue(context, SecureStorage.TOKEN_ACCESS_TOKEN, accessToken);
         SecureStorage.setValue(context, SecureStorage.TOKEN_ID_TOKEN, idToken);
 
-        Log.i("oidc-tools", "Tokens saved");
+        Log.d("oidc-tools", "Tokens saved");
 
         if(jsonObject.has("refresh_token"))
         {
-            Log.i("oidc-tools", "Saving refresh token");
+            Log.d("oidc-tools", "Saving refresh token");
             try {
                 SecureStorage.setValue(context, SecureStorage.TOKEN_REFRESH_TOKEN, jsonObject.getString("refresh_token"));
             }catch(JSONException e)
@@ -215,7 +244,7 @@ public class OIDCTools {
             }
         }
         else
-            Log.i("oidc-tools", "No refresh token found");
+            Log.d("oidc-tools", "No refresh token found");
 
         return jsonObject;
     }
