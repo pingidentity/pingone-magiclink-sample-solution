@@ -38,7 +38,7 @@ Create an OIDC Client with the following attributes:
 
 ### Sample Users
 
-This solution requires that the users entered into the mobile app exist with the following attributes:
+This solution requires that the users entered into the mobile app exist in PingOne with the following attributes:
 - Username: email address of the user.
 - MFA Enabled: true.
 
