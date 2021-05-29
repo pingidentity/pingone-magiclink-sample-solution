@@ -12,7 +12,7 @@ The Magic Link service performs the following actions:
 
 ## Accompanying Android Application
 
-This service comes with a sample Android Application, found [here](../../../magic-link-android).
+This service comes with a sample Android Application, found [here](mobile-android).
 
 ## Sequence Diagram
 

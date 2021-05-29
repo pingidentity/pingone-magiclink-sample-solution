@@ -2,7 +2,7 @@
 
 The Android application, in conjunction with the PingOne Magic Link Service provides a passwordless authentication experience into a PingOne application using a One Time Link.
 
-More details about the Magic Link Service can be found [here](../../../magic-link-webservice).
+More details about the Magic Link Service can be found [here](../../../).
 
 ## Setup and Installation
 
