@@ -3,6 +3,7 @@ package com.pingidentity.magiclinkdemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -51,6 +52,7 @@ public class ExchangeCode extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.code() == 401)
                 {
+                    Log.i("userinfo-callback", "401 - Unauthorized, AT: " + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
                     Call nextCall = OIDCTools.callGET(client, getApplicationContext(), BuildConfig.OIDC_USERINFO, null);
                     Callback userInfoCallback = getUserInfoCallback();
 
@@ -60,6 +62,7 @@ public class ExchangeCode extends AppCompatActivity {
                     OIDCTools.refreshToken(client, getApplicationContext(), nextCall, userInfoCallback, errorCallback);
                 }
                 else if (response.isSuccessful()) {
+                    Log.i("userinfo-callback", "200 - Success");
                     String responseStr = response.body().string();
 
                     String name = "";

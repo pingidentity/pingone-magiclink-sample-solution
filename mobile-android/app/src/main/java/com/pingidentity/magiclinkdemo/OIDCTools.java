@@ -1,6 +1,7 @@
 package com.pingidentity.magiclinkdemo;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -32,12 +33,17 @@ public class OIDCTools {
 
     public synchronized static boolean refreshToken(OkHttpClient client, Context context, Call nextCall, Callback nextCallback, Callback errorCallback)
     {
-        SecureStorage.removeValue(context, SecureStorage.TOKEN_ACCESS_TOKEN);
-
         String refreshToken = SecureStorage.getValue(context, SecureStorage.TOKEN_REFRESH_TOKEN);
 
         if(refreshToken == null || refreshToken.trim().equals(""))
+        {
+            Log.i("oidc-tools", "Refreshing token failed - no refresh token found");
             return false;
+        }
+
+        Log.i("oidc-tools", "Refreshing tokens");
+
+        SecureStorage.removeValue(context, SecureStorage.TOKEN_ACCESS_TOKEN);
 
         String clientId = SecureStorage.getValue(context, SecureStorage.LOGIN_CLIENT_ID);
         String redirectUri = SecureStorage.getValue(context, SecureStorage.LOGIN_REDIRECT_URI);
@@ -71,6 +77,7 @@ public class OIDCTools {
         while(accessToken == null && count < 50)
         {
             try {
+                Log.i("oidc-tools", "Waiting for access token");
                 Thread.sleep(100);
                 accessToken = SecureStorage.getValue(context, SecureStorage.TOKEN_ACCESS_TOKEN);
             }catch(InterruptedException e)
@@ -84,6 +91,8 @@ public class OIDCTools {
 
     public synchronized static boolean exchangeCode(OkHttpClient client, Context context, String code, Call nextCall, Callback nextCallback, Callback errorCallback)
     {
+        Log.i("oidc-tools", "Exchanging code for access token");
+
         String clientId = SecureStorage.getValue(context, SecureStorage.LOGIN_CLIENT_ID);
         String codeVerifier = SecureStorage.getValue(context, SecureStorage.LOGIN_CODE_VERIFIER);
         String redirectUri = SecureStorage.getValue(context, SecureStorage.LOGIN_REDIRECT_URI);
@@ -140,6 +149,8 @@ public class OIDCTools {
 
     public static JSONObject saveTokens(@NonNull Context context, String accessTokenResponse)
     {
+        Log.i("oidc-tools", "Saving tokens");
+
         String expectedNonce = SecureStorage.getValue(context, SecureStorage.LOGIN_NONCE, true);
 
         if(expectedNonce == null || expectedNonce.trim().equals(""))
@@ -192,14 +203,19 @@ public class OIDCTools {
         SecureStorage.setValue(context, SecureStorage.TOKEN_ACCESS_TOKEN, accessToken);
         SecureStorage.setValue(context, SecureStorage.TOKEN_ID_TOKEN, idToken);
 
+        Log.i("oidc-tools", "Tokens saved");
+
         if(jsonObject.has("refresh_token"))
         {
+            Log.i("oidc-tools", "Saving refresh token");
             try {
                 SecureStorage.setValue(context, SecureStorage.TOKEN_REFRESH_TOKEN, jsonObject.getString("refresh_token"));
             }catch(JSONException e)
             {
             }
         }
+        else
+            Log.i("oidc-tools", "No refresh token found");
 
         return jsonObject;
     }
