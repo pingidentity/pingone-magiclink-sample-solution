@@ -96,7 +96,7 @@ public class PingOneMagicLinkController {
 			ipAddressHeader = DEFAULT_HOST_HEADER;
 		
 		if(!StringUtils.isEmpty(request.getHeader(ipAddressHeader)))
-			return request.getHeader(request.getHeader(ipAddressHeader));
+			return request.getHeader(ipAddressHeader);
 		else
 			return request.getRemoteAddr();
 	}
