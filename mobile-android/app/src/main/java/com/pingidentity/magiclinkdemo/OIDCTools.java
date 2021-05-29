@@ -84,7 +84,7 @@ public class OIDCTools {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.OIDC_TOKEN)
                 .post(postBody);
 
-        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCall, nextCallback);
+        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCallback);
 
         post(client, BuildConfig.OIDC_TOKEN, postBody, tokenRetrievalCallback);
 
@@ -114,7 +114,7 @@ public class OIDCTools {
         return accessToken;
     }
 
-    public synchronized static boolean exchangeCode(OkHttpClient client, Context context, String code, Call nextCall, Callback nextCallback, Callback errorCallback)
+    public synchronized static boolean exchangeCode(OkHttpClient client, Context context, String code, Callback nextCallback, Callback errorCallback)
     {
         Log.d("oidc-tools", "Exchanging code for access token");
 
@@ -134,7 +134,7 @@ public class OIDCTools {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.OIDC_TOKEN)
                 .post(postBody);
 
-        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCall, nextCallback);
+        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCallback);
 
         post(client, BuildConfig.OIDC_TOKEN, postBody, tokenRetrievalCallback);
 

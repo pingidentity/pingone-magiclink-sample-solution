@@ -42,19 +42,22 @@ public class SecureStorage {
 
     public static void clearValues(@NonNull Context context)
     {
+        removeValue(context, TOKEN_ACCESS_TOKEN);
+        removeValue(context, TOKEN_ID_TOKEN);
+        removeValue(context, TOKEN_REFRESH_TOKEN);
         removeValue(context, INPUT_EMAIL);
         removeValue(context, LOGIN_NONCE);
         removeValue(context, LOGIN_CODE_VERIFIER);
         removeValue(context, LOGIN_EXPECTED_EMAIL);
         removeValue(context, LOGIN_CLIENT_ID);
         removeValue(context, LOGIN_REDIRECT_URI);
-        removeValue(context, TOKEN_ACCESS_TOKEN);
-        removeValue(context, TOKEN_ID_TOKEN);
-        removeValue(context, TOKEN_REFRESH_TOKEN);
     }
 
     public static void removeValue(@NonNull Context context, String name)
     {
-        context.deleteSharedPreferences(name);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(name);
+        editor.apply();
     }
 }

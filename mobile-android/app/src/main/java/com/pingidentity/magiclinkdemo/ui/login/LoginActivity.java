@@ -149,7 +149,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initiateMagicLink()
     {
+
+        Log.d("loginactivity", "AT-before-" + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
         SecureStorage.clearValues(getApplicationContext());
+
+        Log.d("loginactivity", "AT-after-" + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
 
         JSONObject jsonObject = new JSONObject();
         try {

@@ -7,17 +7,18 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class TokenRetrievalCallback implements Callback {
     private final Context context;
-    private final Call nextCall;
     private final Callback nextCallback;
 
-    public TokenRetrievalCallback(Context context, Call nextCall, Callback nextCallback)
+    private OkHttpClient client = new OkHttpClient();
+
+    public TokenRetrievalCallback(Context context, Callback nextCallback)
     {
         this.context = context;
-        this.nextCall = nextCall;
         this.nextCallback = nextCallback;
 
     }
@@ -34,7 +35,7 @@ public class TokenRetrievalCallback implements Callback {
 
             OIDCTools.saveTokens(context, responseStr);
 
-            this.nextCall.enqueue(this.nextCallback);
+            Call nextCall = OIDCTools.callGET(client, context, BuildConfig.OIDC_USERINFO, this.nextCallback);
 
             return;
 
