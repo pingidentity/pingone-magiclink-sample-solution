@@ -2,7 +2,7 @@ server.tomcat.remote_ip_header=x-forwarded-for
 server.tomcat.protocol_header=x-forwarded-proto
 server.port=9191
 
-base.url=<MAGICLINK_BASE_URL>
+base.url=http://localhost:9191
 
 header.ipaddress=X-FORWARDED-FOR
 
