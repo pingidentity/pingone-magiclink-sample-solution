@@ -29,6 +29,7 @@ Create an MFA Only Policy with the following attributes:
 
 Create an OIDC Client with the following attributes:
 - A generated Client Secret.
+   - Important! Do not provide this secret to the mobile application. The mobile application can authenticate using PKCE. The Client Secret should only be used by the web service to generate a login_hint_token.
 - Response Type: Code
 - Grant Type: Authorization Code
    - PKCE Enforcement: S256_REQUIRED
