@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "f2073dac-4687-41ca-930a-916b615f3b75",
+		"name": "PingOne Magic Link",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Drop Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set environment variables for next test\", function () {",
+							"    var response = pm.response.json();",
+							"    pm.environment.set(\"otlLink\", response.otlLink);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"subject\":\"{{magiclink-subject}}\",\n    \"nonce\":\"{{magiclink-nonce}}\",\n    \"state\":\"{{magiclink-state}}\",\n    \"code_challenge_method\":\"S256\",\n    \"code_challenge\":\"{{magiclink-code_challenge}}\",\n    \"scope\":\"openid profile\",\n    \"client_id\":\"{{pingone-client_id}}\",\n    \"redirect_uri\":\"{{pingone-client_redirect_uri}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8989/pingone/register?dev-mode=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"pingone",
+						"register"
+					],
+					"query": [
+						{
+							"key": "dev-mode",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Simulate claim from email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set environment variables for next test\", function () {",
+							"    var locationHeader = pm.response.headers.get(\"Location\");",
+							"    if(!locationHeader)",
+							"        locationHeader = pm.response.headers.get(\"Referer\");",
+							"",
+							"    pm.environment.set(\"oidc-request-location\", locationHeader);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{otlLink}}",
+					"host": [
+						"{{otlLink}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get OIDC Auth Code",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set environment variables for next test\", function () {",
+							"    var locationHeader = pm.response.headers.get(\"Location\");",
+							"    if(!locationHeader)",
+							"        locationHeader = pm.response.headers.get(\"Referer\");",
+							"",
+							"    var locationParams = locationHeader.split(\"?\")[1];",
+							"    const eachParamArray = locationParams.split('&');",
+							"    let params = {};",
+							"    eachParamArray.forEach((param) => {",
+							"        const key = param.split('=')[0];",
+							"        const value = param.split('=')[1];",
+							"        Object.assign(params, {[key]: value});",
+							"    });",
+							"    pm.environment.set(\"auth-code\", params[\"code\"]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{oidc-request-location}}",
+					"host": [
+						"{{oidc-request-location}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exchange Code for Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set environment variables for next test\", function () {",
+							"    var locationHeader = pm.response.headers.get(\"Location\");",
+							"    if(!locationHeader)",
+							"        locationHeader = pm.response.headers.get(\"Referer\");",
+							"",
+							"    var locationParams = locationHeader.split(\"?\")[1];",
+							"    const eachParamArray = locationParams.split('&');",
+							"    let params = {};",
+							"    eachParamArray.forEach((param) => {",
+							"        const key = param.split('=')[0];",
+							"        const value = param.split('=')[1];",
+							"        Object.assign(params, {[key]: value});",
+							"    });",
+							"    pm.environment.set(\"auth-code\", params[\"code\"]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{pingone-client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{pingone-client_redirect_uri}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code_verifier",
+							"value": "{{magiclink-code_verify}}",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "{{auth-code}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{pingone-baseurl}}/as/token",
+					"host": [
+						"{{pingone-baseurl}}"
+					],
+					"path": [
+						"as",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "magiclink-subject",
+			"value": ""
+		},
+		{
+			"key": "magiclink-nonce",
+			"value": "abcde123456"
+		},
+		{
+			"key": "magiclink-state",
+			"value": "abcde123456"
+		},
+		{
+			"key": "magiclink-code_challenge",
+			"value": "PNU4mSDcKWgrG1Sl8C7UT9n0PyvOJEuc6JV7r9YcCyE"
+		},
+		{
+			"key": "magiclink-code_verify",
+			"value": "iE6J6yykJ68pWqYooNvqp17xNF_54jOQttyTG9j-E0pggUO.lsDm23t9ZdTjsFT.SpzludwTRlun8wQX8VJunzE09tnWHqviupObE-5rF_fAHlcsqMl5ti4Kx53vVf3j"
+		},
+		{
+			"key": "pingone-baseurl",
+			"value": "https://auth.pingone.com/<ENVID>"
+		},
+		{
+			"key": "pingone-client_id",
+			"value": ""
+		},
+		{
+			"key": "pingone-client_redirect_uri",
+			"value": "pingapac://magiclink/callback"
+		}
+	]
+}

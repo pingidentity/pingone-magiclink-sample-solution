@@ -1,0 +1,30 @@
+participant user as User
+participant email as "Email Inbox"
+participant mobile as "Mobile App"
+participant service as "Magic Link Service"
+participant smtp as SMTP
+participant browser as "Browser"
+participant pingone as PingOne
+
+user -> mobile : Type in email address
+mobile -> mobile : Generate OIDC parameters with PKCE
+mobile -> service : Post OIDC parameters
+service -> service : Preserve OIDC parameters
+service -> service : Generate One Time Link
+service -> smtp : Send OTL to user
+smtp -> email : Email received
+user -> email : Click OTL
+email -> browser : Launch OTL in Browser
+browser -> service : Claim OTP link received
+service -> service : Generate login_hint_token (with client_secret)
+service -> service : Generate PingOne authorization URL with login_hint_token
+service -> browser : Redirect 302 to PingOne authorization URL
+browser -> pingone : Redirect to PingOne
+pingone -> pingone : Validate login_hint_token
+pingone -> browser : Authorization code issued via Browser
+browser -> mobile : Deep link redirect_uri return to mobile
+mobile -> pingone : Exchange code for Access Token with PKCE verification (no client_secret)
+pingone -> mobile : Access Token and ID Token returned
+mobile -> mobile : Validate ID Token nonce
+mobile -> pingone : Call UserInfo service
+pingone -> mobile : User details returned
