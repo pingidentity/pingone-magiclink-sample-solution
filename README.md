@@ -46,11 +46,11 @@ This solution requires that the users entered into the mobile app exist with the
 
 ### Web Service
 
-This solution requires you to launch a web service. Details found [here](web-service).
+This solution requires you to launch a web service. Details and installation steps found [here](web-service).
 
 ### Android Application
 
-This solution comes with a sample Android Application, found [here](mobile-android).
+This solution comes with a sample Android Application demonstrating the passwordless flow. Details and installation steps found [here](mobile-android).
 
 
 ## Test with Postman
