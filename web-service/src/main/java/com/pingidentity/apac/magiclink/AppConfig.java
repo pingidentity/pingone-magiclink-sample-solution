@@ -14,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.pingidentity.apac.magiclink.otp.IRequestStorage;
+import com.pingidentity.apac.magiclink.otp.impl.LocalRequestStorageImpl;
 import com.pingidentity.apac.magiclink.utils.ClassLoaderUtil;
 import com.pingidentity.apac.magiclink.utils.EmailSender;
 
@@ -140,6 +142,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 			config = "false";
 		
 		return Boolean.valueOf(config);
+	}
+	
+	@Bean
+	public IRequestStorage requestStorage()
+	{
+		return new LocalRequestStorageImpl();
 	}
 
 	private String getConfig(String configName) {

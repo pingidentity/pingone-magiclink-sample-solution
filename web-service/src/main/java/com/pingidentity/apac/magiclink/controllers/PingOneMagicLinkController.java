@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pingidentity.apac.magiclink.exceptions.CodeNotFoundException;
 import com.pingidentity.apac.magiclink.exceptions.CodeNotProvidedException;
+import com.pingidentity.apac.magiclink.otp.IRequestStorage;
 import com.pingidentity.apac.magiclink.otp.OTLRequest;
 import com.pingidentity.apac.magiclink.otp.OneTimeLink;
-import com.pingidentity.apac.magiclink.otp.TimeLimitedHashMap;
 import com.pingidentity.apac.magiclink.utils.EmailSender;
 import com.pingidentity.apac.magiclink.utils.JwtUtilities;
 
@@ -32,8 +32,9 @@ public class PingOneMagicLinkController {
 	private static final String PATH_CLAIMOTP = "/pingone/launch";
 
 	private static final String DEFAULT_HOST_HEADER = "X-FORWARDED-FOR";
-
-	private final TimeLimitedHashMap<String, OTLRequest> _OTLURLMap = new TimeLimitedHashMap<String, OTLRequest>(200000);
+	
+	@Autowired
+	private IRequestStorage requestStorage;
 
 	@Autowired
 	private String baseUrl;
@@ -65,17 +66,17 @@ public class PingOneMagicLinkController {
 		if (StringUtils.isEmpty(code))
 			throw new CodeNotProvidedException("Code not provided in request");
 
-		if (!_OTLURLMap.containsKey(code))
+		if (!requestStorage.isRequestExists(code))
 			throw new CodeNotFoundException("Code not provided: " + code);
 
 		String ipAddress = getIpAddress(request);
 		
-		if (_OTLURLMap.get(code, ipAddress) == null) {
-			_OTLURLMap.remove(code);
+		if (requestStorage.getRequest(code, ipAddress) == null) {
+			requestStorage.remove(code);
 			throw new CodeNotFoundException("Code expired: " + code);
 		}
 		
-		OTLRequest otlRequest = _OTLURLMap.get(code, ipAddress);
+		OTLRequest otlRequest = requestStorage.getRequest(code, ipAddress);
 		
 		String token = getToken(otlRequest);
 		String oidcUrl = String.format("%s/as/authorize?client_id=%s&response_type=code&scope=%s&nonce=%s&code_challenge_method=%s&code_challenge=%s&redirect_uri=%s&state=%s",
@@ -86,7 +87,7 @@ public class PingOneMagicLinkController {
 		response.setStatus(302);
 		response.setHeader("Location", registrationUrl);
 
-		_OTLURLMap.remove(code);
+		requestStorage.remove(code);
 	}
 
 	private String getIpAddress(HttpServletRequest request) {
@@ -138,7 +139,7 @@ public class PingOneMagicLinkController {
 		
 		String ipAddress = getIpAddress(request);
 
-		_OTLURLMap.put(key, otlRequest, otlExpiresMilliseconds, ipAddress);
+		requestStorage.register(key, otlRequest, otlExpiresMilliseconds, ipAddress);
 
 		String otl = String.format("%s%s?code=%s", this.baseUrl, PATH_CLAIMOTP, key);
 		

@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.otp;
+package com.pingidentity.apac.magiclink.otp.impl;
 
 import java.util.Date;
 import java.util.Map;
