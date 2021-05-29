@@ -13,7 +13,7 @@ Configuration Name | Description | Example
 CLIENT_CALLBACK | The redirect_uri of the OIDC client. It should point to a deep link (custom scheme) configured in the AndroidManifest.xml file. | pingapac://magiclink/callback
 CLIENT_ID | Client ID for the mobile application. | {clientId}
 CLIENT_SCOPES | Client scopes used during the authorization flow. This will determine what information is available when calling the userinfo service | openid profile
-MAGICLINK_BASEURL | Frontend Base URL of the magic link service | https://magiclink.pingapac.com
+MAGICLINK_BASEURL | Frontend Base URL of the magic link service. The endpoint must be resolvable by the mobile device. Use the router supplied IP Address of the host if running an emulator and the web service on the same host. | https://magiclink.pingapac.com
 OIDC_USERINFO | The PingOne userinfo service endpoint | https://auth.pingone.com/{environmentId}/as/userinfo
 OIDC_TOKEN | The PingOne userinfo service endpoint | https://auth.pingone.com/{environmentId}/as/token
 OIDC_JWKS | The PingOne userinfo service endpoint | https://auth.pingone.com/{environmentId}/as/jwks
