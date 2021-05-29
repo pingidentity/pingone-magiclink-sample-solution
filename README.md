@@ -57,6 +57,8 @@ This solution comes with a sample Android Application demonstrating the password
 
 Postman scripts [here](artefacts/postman.collection) have been required to test the solution out without a mobile application.
 
+Important: The Magic Link web service needs to be running with devmode=true. This allows the Postman scripts to retrieve the OTL in the OIDC claim dropoff call.
+
 Import the collection into postman and modify the following Collection Variables:
 
 Configuration Name | Description | Example
