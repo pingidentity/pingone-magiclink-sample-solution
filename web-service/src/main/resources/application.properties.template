@@ -20,7 +20,7 @@ mail.smtp.auth=true
 mail.smtp.starttls.enable=true
 mail.smtp.host=smtp.gmail.com
 mail.smtp.port=587
-mail.smtp.template.body=<H1>Hi there.</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>
-mail.smtp.template.subject=Sign in with magic link
+mail.template.body=<H1>Hi there.</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>
+mail.template.subject=Sign in with magic link
 
 devmode=true

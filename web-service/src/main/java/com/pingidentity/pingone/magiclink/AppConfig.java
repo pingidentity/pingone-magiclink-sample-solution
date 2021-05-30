@@ -58,7 +58,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public String emailTemplateBody()
 	{
-		String config = getConfig("mail.smtp.template.body");
+		String config = getConfig("mail.template.body");
 		
 		return config;
 	}
@@ -66,7 +66,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public String emailTemplateSubject()
 	{
-		String config = getConfig("mail.smtp.template.subject");
+		String config = getConfig("mail.template.subject");
 		
 		return config;
 	}
