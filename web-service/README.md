@@ -60,7 +60,7 @@ docker run -p 9191:9191 \
   --env MAGICLINK_mail_smtp_starttls_enable=true \
   --env MAGICLINK_mail_smtp_host=smtp.gmail.com \
   --env MAGICLINK_mail_smtp_port=587 \
-  --env MAGICLINK_mail_template_body="<H1>Hi there.</H1><p>Please click your magic link to finalise authentication: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>" \
+  --env MAGICLINK_mail_template_body="```<H1>Hi there.</H1><p>Please click your magic link to finalise authentication: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>```" \
   --env MAGICLINK_mail_template_subject="Sign in with magic link" \
   --env MAGICLINK_devmode=false \
   tamatping/magiclink:latest
