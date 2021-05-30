@@ -14,10 +14,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.pingidentity.pingone.magiclink.notf.EmailSender;
 import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
 import com.pingidentity.pingone.magiclink.otp.impl.LocalRequestStorageImpl;
 import com.pingidentity.pingone.magiclink.utils.ClassLoaderUtil;
-import com.pingidentity.pingone.magiclink.utils.EmailSender;
 
 @Configuration
 @ComponentScan("com.pingidentity.pingone.magiclink")
@@ -55,6 +55,22 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		return config;
 	}
 	
+	@Bean
+	public String emailTemplateBody()
+	{
+		String config = getConfig("mail.smtp.template.body");
+		
+		return config;
+	}
+	
+	@Bean
+	public String emailTemplateSubject()
+	{
+		String config = getConfig("mail.smtp.template.subject");
+		
+		return config;
+	}
+	
 	@Bean 
 	public Session emailSession()
 	{
@@ -88,7 +104,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public EmailSender emailSender()
 	{
-		EmailSender emailSender = new EmailSender(emailSession(), emailFrom(), emailSenderThreads());
+		EmailSender emailSender = new EmailSender(emailSession(), emailFrom(), emailTemplateSubject(), emailTemplateBody(), emailSenderThreads());
 		
 		return emailSender;
 	}

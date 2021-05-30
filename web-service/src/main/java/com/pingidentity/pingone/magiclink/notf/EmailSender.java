@@ -1,4 +1,4 @@
-package com.pingidentity.pingone.magiclink.utils;
+package com.pingidentity.pingone.magiclink.notf;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -24,19 +24,24 @@ public class EmailSender {
 	
 	private final Session emailSession;
 	private final String emailFrom;
+
+	private final String emailTemplate;
+	private final String emailSubject;
 	
 	private final ExecutorService executor;
 	
-	public EmailSender(Session emailSession, String emailFrom, int emailThreads)
+	public EmailSender(Session emailSession, String emailFrom, String emailSubject, String emailTemplate, int emailThreads)
 	{
 		this.emailSession = emailSession;
 		this.emailFrom = emailFrom;
+		this.emailTemplate = emailTemplate;
+		this.emailSubject = emailSubject;
 		executor = Executors.newFixedThreadPool(emailThreads);
 	}
 
-	public boolean send(String toAddress, String subject, String htmlText)
+	public boolean send(String toAddress, String htmlText)
 	{	
-		Callable<Boolean> sendEmailCall = new SendEmailCall(toAddress, subject, htmlText);
+		Callable<Boolean> sendEmailCall = new SendEmailCall(toAddress, this.emailSubject, htmlText);
 		FutureTask<Boolean> sendEmailTask = new FutureTask<Boolean>(sendEmailCall);
 		
 		executor.execute(sendEmailTask);
@@ -62,8 +67,10 @@ public class EmailSender {
 		}
 	}
 	
-	private void sendEmail(String toEmail, String subject, String htmlText) throws IOException {
+	private void sendEmail(String toEmail, String subject, String otp) throws IOException {
 
+		String htmlText = String.format(emailTemplate, otp);
+		
 		try {
 
 			if(log.isDebugEnabled())

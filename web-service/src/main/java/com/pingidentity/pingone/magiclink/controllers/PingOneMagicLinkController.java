@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pingidentity.pingone.magiclink.exceptions.CodeNotFoundException;
 import com.pingidentity.pingone.magiclink.exceptions.CodeNotProvidedException;
+import com.pingidentity.pingone.magiclink.notf.EmailSender;
 import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
 import com.pingidentity.pingone.magiclink.otp.OTLRequest;
 import com.pingidentity.pingone.magiclink.otp.OneTimeLink;
-import com.pingidentity.pingone.magiclink.utils.EmailSender;
 import com.pingidentity.pingone.magiclink.utils.JwtUtilities;
 
 @RestController
@@ -130,7 +130,7 @@ public class PingOneMagicLinkController {
 		String htmlText = "<H1>Hello</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"" + otl
 				+ "\">Click here to log in</a></p>";
 		
-		emailSender.send(otlRequest.getSubject(), "Sign in with magic link", htmlText);
+		emailSender.send(otlRequest.getSubject(), otl);
 	}
 
 	private String getOTL(HttpServletRequest request, OTLRequest otlRequest) {
