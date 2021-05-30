@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.exceptions;
+package com.pingidentity.pingone.magiclink.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

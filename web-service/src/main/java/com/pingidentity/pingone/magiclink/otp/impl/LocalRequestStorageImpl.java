@@ -1,7 +1,7 @@
-package com.pingidentity.apac.magiclink.otp.impl;
+package com.pingidentity.pingone.magiclink.otp.impl;
 
-import com.pingidentity.apac.magiclink.otp.IRequestStorage;
-import com.pingidentity.apac.magiclink.otp.OTLRequest;
+import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
+import com.pingidentity.pingone.magiclink.otp.OTLRequest;
 
 public class LocalRequestStorageImpl implements IRequestStorage {
 

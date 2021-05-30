@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.otp;
+package com.pingidentity.pingone.magiclink.otp;
 
 public class OneTimeLink {
 

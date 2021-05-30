@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.utils;
+package com.pingidentity.pingone.magiclink.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

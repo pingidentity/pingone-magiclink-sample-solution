@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink;
+package com.pingidentity.pingone.magiclink;
 
 
 import org.springframework.boot.SpringApplication;

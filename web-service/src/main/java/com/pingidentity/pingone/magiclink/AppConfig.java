@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink;
+package com.pingidentity.pingone.magiclink;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,13 +14,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.pingidentity.apac.magiclink.otp.IRequestStorage;
-import com.pingidentity.apac.magiclink.otp.impl.LocalRequestStorageImpl;
-import com.pingidentity.apac.magiclink.utils.ClassLoaderUtil;
-import com.pingidentity.apac.magiclink.utils.EmailSender;
+import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
+import com.pingidentity.pingone.magiclink.otp.impl.LocalRequestStorageImpl;
+import com.pingidentity.pingone.magiclink.utils.ClassLoaderUtil;
+import com.pingidentity.pingone.magiclink.utils.EmailSender;
 
 @Configuration
-@ComponentScan("com.pingidentity.apac.magiclink")
+@ComponentScan("com.pingidentity.pingone.magiclink")
 public class AppConfig extends WebMvcConfigurerAdapter {
 	private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 

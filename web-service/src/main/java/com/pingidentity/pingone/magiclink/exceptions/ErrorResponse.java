@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.exceptions;
+package com.pingidentity.pingone.magiclink.exceptions;
 
 public class ErrorResponse {
 

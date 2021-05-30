@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.security;
+package com.pingidentity.pingone.magiclink.security;
 
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;

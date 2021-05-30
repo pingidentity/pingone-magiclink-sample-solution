@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.controllers;
+package com.pingidentity.pingone.magiclink.controllers;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pingidentity.apac.magiclink.exceptions.CodeNotFoundException;
-import com.pingidentity.apac.magiclink.exceptions.CodeNotProvidedException;
-import com.pingidentity.apac.magiclink.otp.IRequestStorage;
-import com.pingidentity.apac.magiclink.otp.OTLRequest;
-import com.pingidentity.apac.magiclink.otp.OneTimeLink;
-import com.pingidentity.apac.magiclink.utils.EmailSender;
-import com.pingidentity.apac.magiclink.utils.JwtUtilities;
+import com.pingidentity.pingone.magiclink.exceptions.CodeNotFoundException;
+import com.pingidentity.pingone.magiclink.exceptions.CodeNotProvidedException;
+import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
+import com.pingidentity.pingone.magiclink.otp.OTLRequest;
+import com.pingidentity.pingone.magiclink.otp.OneTimeLink;
+import com.pingidentity.pingone.magiclink.utils.EmailSender;
+import com.pingidentity.pingone.magiclink.utils.JwtUtilities;
 
 @RestController
 public class PingOneMagicLinkController {

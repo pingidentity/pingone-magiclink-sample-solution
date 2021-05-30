@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.utils;
+package com.pingidentity.pingone.magiclink.utils;
 
 public class HttpResponseObj {
 

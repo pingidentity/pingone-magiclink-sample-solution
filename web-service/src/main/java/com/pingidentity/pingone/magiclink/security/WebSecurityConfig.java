@@ -1,4 +1,4 @@
-package com.pingidentity.apac.magiclink.security;
+package com.pingidentity.pingone.magiclink.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
