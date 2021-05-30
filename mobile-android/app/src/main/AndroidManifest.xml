@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExchangeCode">
+        <activity android:name=".ui.view.ExchangeCode">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WaitMagicLink"
+            android:name=".ui.view.WaitMagicLink"
             android:parentActivityName=".ui.login.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

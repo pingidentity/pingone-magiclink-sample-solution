@@ -1,4 +1,4 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.ui.view.callback;
 
 
 import android.content.Context;
@@ -17,7 +17,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-public class CallUserInfoCallback implements Callback {
+public class WaitMagicLinkCallback implements Callback {
     private final Context context;
     private final Call nextCall;
     private final Callback nextCallback;
@@ -26,7 +26,7 @@ public class CallUserInfoCallback implements Callback {
 
     private OkHttpClient client = new OkHttpClient();
 
-    public CallUserInfoCallback(Context context, Call nextCall, Callback nextCallback, AppCompatActivity activity, TextView welcomeView)
+    public WaitMagicLinkCallback(Context context, Call nextCall, Callback nextCallback, AppCompatActivity activity, TextView welcomeView)
     {
         this.context = context;
         this.nextCall = nextCall;
@@ -75,7 +75,7 @@ public class CallUserInfoCallback implements Callback {
 
         Log.d("exchangecode", "Userinfo name: " + name);
 
-        activity.runOnUiThread(new CallUserInfoCallback.PrintWelcomeRunner(name));
+        activity.runOnUiThread(new WaitMagicLinkCallback.PrintWelcomeRunner(name));
     }
 
     class PrintWelcomeRunner implements Runnable

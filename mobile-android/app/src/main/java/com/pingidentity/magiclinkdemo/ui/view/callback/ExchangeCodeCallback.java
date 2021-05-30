@@ -1,7 +1,10 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.ui.view.callback;
 
 
 import android.content.Context;
+
+import com.pingidentity.magiclinkdemo.BuildConfig;
+import com.pingidentity.magiclinkdemo.oidc.OIDCTools;
 
 import java.io.IOException;
 
@@ -10,13 +13,13 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-public class TokenRetrievalCallback implements Callback {
+public class ExchangeCodeCallback implements Callback {
     private final Context context;
     private final Callback nextCallback;
 
     private OkHttpClient client = new OkHttpClient();
 
-    public TokenRetrievalCallback(Context context, Callback nextCallback)
+    public ExchangeCodeCallback(Context context, Callback nextCallback)
     {
         this.context = context;
         this.nextCallback = nextCallback;

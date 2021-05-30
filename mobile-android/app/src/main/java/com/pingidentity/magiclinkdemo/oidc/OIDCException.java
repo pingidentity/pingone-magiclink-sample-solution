@@ -1,4 +1,4 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.oidc;
 
 public class OIDCException extends RuntimeException {
     private static final long serialVersionUID = 3037337771929156850L;

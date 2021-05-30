@@ -1,6 +1,5 @@
 package com.pingidentity.magiclinkdemo.ui.login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,10 +21,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.pingidentity.magiclinkdemo.BuildConfig;
-import com.pingidentity.magiclinkdemo.OIDCTools;
+import com.pingidentity.magiclinkdemo.oidc.OIDCTools;
 import com.pingidentity.magiclinkdemo.R;
 import com.pingidentity.magiclinkdemo.SecureStorage;
-import com.pingidentity.magiclinkdemo.WaitMagicLink;
+import com.pingidentity.magiclinkdemo.ui.view.WaitMagicLink;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,11 +148,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initiateMagicLink()
     {
-
-        Log.d("loginactivity", "AT-before-" + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
         SecureStorage.clearValues(getApplicationContext());
-
-        Log.d("loginactivity", "AT-after-" + SecureStorage.getValue(getApplicationContext(), SecureStorage.TOKEN_ACCESS_TOKEN));
 
         JSONObject jsonObject = new JSONObject();
         try {

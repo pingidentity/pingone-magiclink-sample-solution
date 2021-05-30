@@ -1,9 +1,13 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.oidc;
 
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.pingidentity.magiclinkdemo.BuildConfig;
+import com.pingidentity.magiclinkdemo.SecureStorage;
+import com.pingidentity.magiclinkdemo.ui.view.callback.ExchangeCodeCallback;
 
 import org.jose4j.jwk.HttpsJwks;
 import org.jose4j.jwt.JwtClaims;
@@ -84,7 +88,7 @@ public class OIDCTools {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.OIDC_TOKEN)
                 .post(postBody);
 
-        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCallback);
+        ExchangeCodeCallback tokenRetrievalCallback = new ExchangeCodeCallback(context, nextCallback);
 
         post(client, BuildConfig.OIDC_TOKEN, postBody, tokenRetrievalCallback);
 
@@ -134,7 +138,7 @@ public class OIDCTools {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.OIDC_TOKEN)
                 .post(postBody);
 
-        TokenRetrievalCallback tokenRetrievalCallback = new TokenRetrievalCallback(context, nextCallback);
+        ExchangeCodeCallback tokenRetrievalCallback = new ExchangeCodeCallback(context, nextCallback);
 
         post(client, BuildConfig.OIDC_TOKEN, postBody, tokenRetrievalCallback);
 

@@ -1,4 +1,4 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.ui.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.pingidentity.magiclinkdemo.R;
+import com.pingidentity.magiclinkdemo.SecureStorage;
 import com.pingidentity.magiclinkdemo.ui.login.LoginActivity;
 
 public class WaitMagicLink extends AppCompatActivity {

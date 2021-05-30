@@ -1,22 +1,17 @@
-package com.pingidentity.magiclinkdemo;
+package com.pingidentity.magiclinkdemo.ui.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.pingidentity.magiclinkdemo.oidc.OIDCTools;
+import com.pingidentity.magiclinkdemo.R;
+import com.pingidentity.magiclinkdemo.ui.view.callback.WaitMagicLinkCallback;
 
-import java.io.IOException;
-
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 
 public class ExchangeCode extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -35,7 +30,7 @@ public class ExchangeCode extends AppCompatActivity {
 
         this.welcomeView = findViewById(R.id.welcome);
 
-        Callback nextCallback = new CallUserInfoCallback(getApplicationContext(), null, null, this, welcomeView);
+        Callback nextCallback = new WaitMagicLinkCallback(getApplicationContext(), null, null, this, welcomeView);
 
         OIDCTools.exchangeCode(client, getApplicationContext(), code, nextCallback, null);
     }
