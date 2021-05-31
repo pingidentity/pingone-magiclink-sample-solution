@@ -56,7 +56,8 @@ This solution comes with a sample Android Application demonstrating the password
 
 ## Test with Postman
 
-Postman scripts [here](artefacts/postman.collection) have been required to test the solution out without a mobile application.
+A Postman collection has been provided to test the solution out without a mobile application. You can import the collection using the following URL.
+- https://raw.githubusercontent.com/pingidentity/pingone-magiclink-sample-solution/main/artefacts/postman.collection
 
 Important: The Magic Link web service needs to be running with devmode=true. This allows the Postman scripts to retrieve the OTL in the OIDC claim dropoff response.
 
