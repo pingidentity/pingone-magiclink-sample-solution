@@ -23,7 +23,7 @@ mail.smtp.password | MAGICLINK_mail_smtp_password | Password to authenticate int
 mail.smtp.starttls.enable | MAGICLINK_mail_smtp_starttls_enable | Require TLS mode | true/false
 mail.smtp.host | MAGICLINK_mail_smtp_host | SMTP hostname | smtp.gmail.com
 mail.smtp.port | MAGICLINK_mail_smtp_port | SMTP port | 587
-mail.template.body | MAGICLINK_mail_template_body | Email template body | ```<H1>Hi there.</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>```
+mail.template.body | MAGICLINK_mail_template_body | Email template body. The solution injects the One Time Link into the string token (%s). | ```<H1>Hi there.</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>```
 mail.template.subject | MAGICLINK_mail_template_subject | Email template subject | Sign in with magic link
 devmode | MAGICLINK_devmode | Dev mode returns the OTL during the OIDC claim dropoff. This isn't recommended in production because the OTL should only be received via Email. It is useful for automated testing e.g. via Postman | true/false
 
