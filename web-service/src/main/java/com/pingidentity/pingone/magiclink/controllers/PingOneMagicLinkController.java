@@ -22,11 +22,10 @@ import com.pingidentity.pingone.magiclink.notf.EmailSender;
 import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
 import com.pingidentity.pingone.magiclink.otp.OTLRequest;
 import com.pingidentity.pingone.magiclink.otp.OneTimeLink;
-import com.pingidentity.pingone.magiclink.utils.JwtUtilities;
+import com.pingidentity.pingone.magiclink.utils.PingOneJwtUtilities;
 
 @RestController
 public class PingOneMagicLinkController {
-	private static final Logger log = LoggerFactory.getLogger(PingOneMagicLinkController.class);
 
 	private static final String PATH_CLAIMOTP = "/pingone/launch";
 
@@ -42,13 +41,10 @@ public class PingOneMagicLinkController {
 	private EmailSender emailSender;
 
 	@Autowired
+	private PingOneJwtUtilities jwtUtilities;
+	
+	@Autowired
 	private String pingoneBaseUrl;
-
-	@Autowired
-	private String pingoneClientId;
-
-	@Autowired
-	private String pingoneClientSecret;
 
 	@Autowired
 	private Long otlExpiresMilliseconds;
@@ -118,10 +114,7 @@ public class PingOneMagicLinkController {
 		
 		String aud = this.pingoneBaseUrl + "/as";
 		
-		if(log.isDebugEnabled())
-			log.debug("Signing login_hint_token with: " + this.pingoneClientId + ", " + this.pingoneClientSecret);
-		
-		return JwtUtilities.getLoginHintToken(this.pingoneClientId, this.pingoneClientSecret, subject, aud);
+		return jwtUtilities.getLoginHintToken(subject, aud);
 	}
 
 	private void sendEmail(OTLRequest otlRequest, String otl) throws IOException {

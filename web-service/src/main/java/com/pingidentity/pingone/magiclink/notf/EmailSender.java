@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import javax.annotation.PostConstruct;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,30 +19,39 @@ import javax.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component(value = "emailSender")
 public class EmailSender {
 	private static final Logger log = LoggerFactory.getLogger(EmailSender.class);
 	
-	private final Session emailSession;
-	private final String emailFrom;
+	@Autowired
+	private Session emailSession;
+	
+	@Autowired
+	private String emailFrom;
 
-	private final String emailTemplate;
-	private final String emailSubject;
+	@Autowired
+	private String emailTemplateBody;
 	
-	private final ExecutorService executor;
+	@Autowired
+	private String emailTemplateSubject;
 	
-	public EmailSender(Session emailSession, String emailFrom, String emailSubject, String emailTemplate, int emailThreads)
+	@Autowired
+	private Integer emailSenderThreads;
+	
+	private ExecutorService executor;
+	
+	@PostConstruct
+	public void init() 
 	{
-		this.emailSession = emailSession;
-		this.emailFrom = emailFrom;
-		this.emailTemplate = emailTemplate;
-		this.emailSubject = emailSubject;
-		executor = Executors.newFixedThreadPool(emailThreads);
+		executor = Executors.newFixedThreadPool(emailSenderThreads);
 	}
 
 	public boolean send(String toAddress, String htmlText)
 	{	
-		Callable<Boolean> sendEmailCall = new SendEmailCall(toAddress, this.emailSubject, htmlText);
+		Callable<Boolean> sendEmailCall = new SendEmailCall(toAddress, this.emailTemplateSubject, htmlText);
 		FutureTask<Boolean> sendEmailTask = new FutureTask<Boolean>(sendEmailCall);
 		
 		executor.execute(sendEmailTask);
@@ -69,7 +79,7 @@ public class EmailSender {
 	
 	private void sendEmail(String toEmail, String subject, String otp) throws IOException {
 
-		String htmlText = String.format(emailTemplate, otp);
+		String htmlText = String.format(emailTemplateBody, otp);
 		
 		try {
 

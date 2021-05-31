@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.pingidentity.pingone.magiclink.notf.EmailSender;
 import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
 import com.pingidentity.pingone.magiclink.otp.impl.LocalRequestStorageImpl;
 import com.pingidentity.pingone.magiclink.utils.ClassLoaderUtil;
@@ -99,14 +98,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		String config = getConfig("otl.expire.ms");
 		
 		return Long.parseLong(config);
-	}
-	
-	@Bean
-	public EmailSender emailSender()
-	{
-		EmailSender emailSender = new EmailSender(emailSession(), emailFrom(), emailTemplateSubject(), emailTemplateBody(), emailSenderThreads());
-		
-		return emailSender;
 	}
 	
 	@Bean
