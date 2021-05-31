@@ -1,7 +1,6 @@
 package com.pingidentity.pingone.magiclink.controllers;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,20 +125,15 @@ public class PingOneMagicLinkController {
 	}
 
 	private void sendEmail(OTLRequest otlRequest, String otl) throws IOException {
-
-		String htmlText = "<H1>Hello</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"" + otl
-				+ "\">Click here to log in</a></p>";
 		
 		emailSender.send(otlRequest.getSubject(), otl);
 	}
 
 	private String getOTL(HttpServletRequest request, OTLRequest otlRequest) {
 
-		String key = UUID.randomUUID().toString();
-		
 		String ipAddress = getIpAddress(request);
 
-		requestStorage.register(key, otlRequest, otlExpiresMilliseconds, ipAddress);
+		String key = requestStorage.register(otlRequest, otlExpiresMilliseconds, ipAddress);
 
 		String otl = String.format("%s%s?code=%s", this.baseUrl, PATH_CLAIMOTP, key);
 		

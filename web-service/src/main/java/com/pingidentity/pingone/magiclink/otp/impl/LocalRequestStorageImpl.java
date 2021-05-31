@@ -1,5 +1,7 @@
 package com.pingidentity.pingone.magiclink.otp.impl;
 
+import java.util.UUID;
+
 import com.pingidentity.pingone.magiclink.otp.IRequestStorage;
 import com.pingidentity.pingone.magiclink.otp.OTLRequest;
 
@@ -8,8 +10,11 @@ public class LocalRequestStorageImpl implements IRequestStorage {
 	private final TimeLimitedHashMap<String, OTLRequest> _OTLURLMap = new TimeLimitedHashMap<String, OTLRequest>(200000);
 	
 	@Override
-	public OTLRequest register(String key, OTLRequest value, long expiryInMillis, String ipAddress) {
-		return _OTLURLMap.put(key, value, expiryInMillis, ipAddress);
+	public String register(OTLRequest value, long expiryInMillis, String ipAddress) {
+		String key = UUID.randomUUID().toString();
+		_OTLURLMap.put(key, value, expiryInMillis, ipAddress);
+		
+		return key;
 	}
 
 	@Override
