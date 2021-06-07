@@ -36,6 +36,7 @@ Create an OIDC Client with the following attributes:
 - Token Endpoint Authentication Method: NONE
 - Resources: add profile
 - Policies: Select the MFA Only Policy you created above.
+- Redirect URI: A deep link URI (custom scheme) which launches the application from the browseri and consumes an auth code. Example: pingapac://magiclink/callback
 
 ### Sample Users
 
