@@ -117,7 +117,7 @@ public class PingOneMagicLinkController {
 		return jwtUtilities.getLoginHintToken(subject, aud);
 	}
 
-	private void sendEmail(OTLRequest otlRequest, String otl) throws IOException {
+	private void sendEmail(OTLRequest otlRequest, String otl) throws Exception {
 		
 		emailSender.send(otlRequest.getSubject(), otl);
 	}

@@ -82,6 +82,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		props.put("mail.smtp.starttls.enable", getConfig("mail.smtp.starttls.enable"));
 		props.put("mail.smtp.host", getConfig("mail.smtp.host"));
 		props.put("mail.smtp.port", getConfig("mail.smtp.port"));
+		props.put("mail.smtp.ssl.protocols", getConfig("mail.smtp.ssl.protocols"));
 
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
