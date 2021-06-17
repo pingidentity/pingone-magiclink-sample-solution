@@ -25,99 +25,89 @@ import org.springframework.stereotype.Component;
 @Component(value = "emailSender")
 public class EmailSender {
 	private static final Logger log = LoggerFactory.getLogger(EmailSender.class);
-	
+
 	@Autowired
 	private Session emailSession;
-	
+
 	@Autowired
 	private String emailFrom;
 
 	@Autowired
 	private String emailTemplateBody;
-	
+
 	@Autowired
 	private String emailTemplateSubject;
-	
+
 	@Autowired
 	private Integer emailSenderThreads;
-	
+
 	private ExecutorService executor;
-	
+
 	@PostConstruct
-	public void init() 
-	{
+	public void init() {
 		executor = Executors.newFixedThreadPool(emailSenderThreads);
 	}
 
-	public boolean send(String toAddress, String htmlText)
-	{	
+	public boolean send(String toAddress, String htmlText) {
 		Callable<Boolean> sendEmailCall = new SendEmailCall(toAddress, this.emailTemplateSubject, htmlText);
 		FutureTask<Boolean> sendEmailTask = new FutureTask<Boolean>(sendEmailCall);
-		
+
 		executor.execute(sendEmailTask);
-		
+
 		return true;
 	}
-	
+
 	class SendEmailCall implements Callable<Boolean> {
-		
+
 		private final String htmlText, toAddress, subject;
-		
-		public SendEmailCall(String toAddress, String subject, String htmlText){
+
+		public SendEmailCall(String toAddress, String subject, String htmlText) {
 			this.toAddress = toAddress;
 			this.htmlText = htmlText;
 			this.subject = subject;
 		}
-		
+
 		@Override
 		public Boolean call() throws Exception {
 			sendEmail(toAddress, subject, htmlText);
-			
+
 			return true;
 		}
 	}
-	
-	private void sendEmail(String toEmail, String subject, String otp) throws IOException {
+
+	private void sendEmail(String toEmail, String subject, String otp) throws Exception {
 
 		String htmlText = String.format(emailTemplateBody, otp);
-		
-		try {
 
-			if(log.isDebugEnabled())
-				log.debug("Sending email to: " + toEmail);
-			// Create a default MimeMessage object.
-			Message message = new MimeMessage(emailSession);
+		if (log.isDebugEnabled())
+			log.debug("Sending email to: " + toEmail);
+		// Create a default MimeMessage object.
+		Message message = new MimeMessage(emailSession);
 
-			// Set From: header field of the header.
-			message.setFrom(new InternetAddress(emailFrom));
+		// Set From: header field of the header.
+		message.setFrom(new InternetAddress(emailFrom));
 
-			// Set To: header field of the header.
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+		// Set To: header field of the header.
+		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
 
-			// Set Subject: header field
-			message.setSubject(subject);
+		// Set Subject: header field
+		message.setSubject(subject);
 
-			// This mail has 2 part, the BODY and the embedded image
-			MimeMultipart multipart = new MimeMultipart("related");
+		// This mail has 2 part, the BODY and the embedded image
+		MimeMultipart multipart = new MimeMultipart("related");
 
-			// first part (the html)
-			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(htmlText, "text/html");
-			// add it
-			multipart.addBodyPart(messageBodyPart);
+		// first part (the html)
+		BodyPart messageBodyPart = new MimeBodyPart();
+		messageBodyPart.setContent(htmlText, "text/html");
+		// add it
+		multipart.addBodyPart(messageBodyPart);
 
-			// put everything together
-			message.setContent(multipart);
-			// Send message
-			Transport.send(message);
-			
-			if(log.isDebugEnabled())
-				log.info("Sending email to succeeded: " + toEmail);
+		// put everything together
+		message.setContent(multipart);
+		// Send message
+		Transport.send(message);
 
-		} catch (MessagingException e) {
-
-			log.error("Sending email to failed: " + toEmail);
-			throw new RuntimeException(e);
-		}
+		if (log.isDebugEnabled())
+			log.info("Sending email to succeeded: " + toEmail);
 	}
 }
