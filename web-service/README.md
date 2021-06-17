@@ -21,6 +21,7 @@ mail.smtp.from | MAGICLINK_mail_smtp_from | Mail from address | noreply@mycompan
 mail.smtp.username | MAGICLINK_mail_smtp_username | Username to authenticate into the SMTP server | smtpuser@mycompany.com
 mail.smtp.password | MAGICLINK_mail_smtp_password | Password to authenticate into the SMTP server | ******
 mail.smtp.starttls.enable | MAGICLINK_mail_smtp_starttls_enable | Require TLS mode | true/false
+mail.smtp.ssl.protocols | MAGICLINK_mail_smtp_ssl_protocols | TLS Protocols | TLSv1.2
 mail.smtp.host | MAGICLINK_mail_smtp_host | SMTP hostname | smtp.gmail.com
 mail.smtp.port | MAGICLINK_mail_smtp_port | SMTP port | 587
 mail.template.body | MAGICLINK_mail_template_body | Email template body. The solution injects the One Time Link into the string token (%s). | ```<H1>Hi there.</H1><p>Your magic link: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>```
@@ -59,6 +60,7 @@ docker run -p 9191:9191 \
   --env MAGICLINK_mail_smtp_auth=true \
   --env MAGICLINK_mail_smtp_starttls_enable=true \
   --env MAGICLINK_mail_smtp_host=smtp.gmail.com \
+  --env MAGICLINK_mail_smtp_ssl_protocols=TLSv1.2 \
   --env MAGICLINK_mail_smtp_port=587 \
   --env MAGICLINK_mail_template_body="<H1>Hi there.</H1><p>Please click your magic link to finalise authentication: </p><p><a id=\"otlhref\" href=\"%s\">Click here to log in</a></p>" \
   --env MAGICLINK_mail_template_subject="Sign in with magic link" \
