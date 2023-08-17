@@ -1,3 +1,5 @@
+# Deprecated
+
 # PingOne Magic Link Solution
 
 The PingOne Magic Link Service provides a passwordless authentication experience into a PingOne application using a One Time Link.
